@@ -1,15 +1,15 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:alpine
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
-    ports:
-      - 5432:5432
-    volumes:
-      - db_data:/var/lib/postgresql/data
+  # db:
+  #   image: postgres:alpine
+  #   environment:
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: password
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
 
   frontend:
     build: ./frontend
@@ -28,10 +28,10 @@ services:
     command: yarn dev
     ports:
       - "8080:8080"
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
 volumes:
   node_modules:
   server_node_modules:
-  db_data:
+  # db_data:
