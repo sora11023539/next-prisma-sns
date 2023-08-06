@@ -1,6 +1,6 @@
 import apiClient from '@/lib/apiClient';
 import { PostType } from '@/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Post from './Post';
 
 const Timeline = () => {
@@ -11,7 +11,7 @@ const Timeline = () => {
     e.preventDefault();
 
     try {
-      const newPost = await apiClient.post('/posts/post', {
+      const newPost = await apiClient.post('/posts', {
         content: postText,
       });
 
@@ -21,6 +21,20 @@ const Timeline = () => {
       alert('ログインしてください')
     }
   }
+
+  useEffect(() => {
+    const fetchLatestPosts = async () => {
+      try {
+        const response = await apiClient.get('/posts');
+        setLatestPosts(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchLatestPosts();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <main className="container mx-auto py-4">

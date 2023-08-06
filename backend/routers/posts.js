@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 // create post
-router.post('/post', async (req, res) => {
+router.post('/posts', async (req, res) => {
   const { content } = req.body;
 
   if (!content) {
@@ -26,26 +26,14 @@ router.post('/post', async (req, res) => {
 });
 
 // get latest post
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await prisma.user.findUnique({ where: { email } });
-
-  if (!user) {
-    return res.status(401).json({ error: 'そのユーザーは存在しません' });
+router.get('/posts', async (req, res) => {
+  try {
+    const latestPosts = await prisma.post.findMany({ take: 10, orderBy: { createdAt: 'desc' } });
+    return res.json(latestPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'サーバーエラーです' });
   }
-
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-
-  if (!isPasswordValid) {
-    return res.status(401).json({ error: 'そのパスワードは間違っています' });
-  }
-
-  const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-    expiresIn: '1d',
-  });
-
-  return res.json({ token });
 });
 
 module.exports = router;
