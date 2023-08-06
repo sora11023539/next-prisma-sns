@@ -1,6 +1,13 @@
+import { PostType } from '@/types';
 import React from 'react';
 
-const Post = () => {
+type Props = {
+  post: PostType;
+}
+
+const Post = (props: Props) => {
+  const { post } = props;
+
   return (
     <div className="bg-white shadow-md rounded p-4 mb-4">
       <div className="mb-4">
@@ -11,11 +18,11 @@ const Post = () => {
             alt="User Avatar"
           />
           <div>
-            <h2 className="font-semibold text-md">name</h2>
-            <p className="text-gray-500 text-sm">3/3</p>
+            <h2 className="font-semibold text-md">{post.author?.username}</h2>
+            <p className="text-gray-500 text-sm">{post.createdAt}</p>
           </div>
         </div>
-        <p className="text-gray-700">New post</p>
+        <p className="text-gray-700">{post.content}</p>
       </div>
     </div>
   );
