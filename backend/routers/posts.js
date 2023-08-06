@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const { PrismaClient } = require('@prisma/client');
+const isAuthenticated = require('../middlewares/isAuthenticated');
 
 const prisma = new PrismaClient();
 
 // create post
-router.post('/posts', async (req, res) => {
+router.post('/posts', isAuthenticated, async (req, res) => {
   const { content } = req.body;
 
   if (!content) {
@@ -15,7 +16,7 @@ router.post('/posts', async (req, res) => {
     const newPost = await prisma.post.create({
       data: {
         content,
-        authorId: 1,
+        authorId: req.userId,
       },
       include: {
         author: true,
