@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const generateIdenticon = require('../utils/generateIdenticon');
 
 const prisma = new PrismaClient();
 
@@ -9,6 +10,7 @@ const prisma = new PrismaClient();
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
+  const defaultIconImage = generateIdenticon(email);
 
   const user = await prisma.user.create({
     data: {
@@ -18,8 +20,11 @@ router.post('/register', async (req, res) => {
       profile: {
         create: {
           bio: 'Hello',
-          profileImageUrl: 'sample.png',
+          profileImageUrl: defaultIconImage,
         },
+      },
+      include: {
+        profile: true,
       },
     },
   });
