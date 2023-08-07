@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       apiClient.get('/users/find').then((res: any) => { setUser(res.data.user); })
     } catch (error) {
-
+      console.log(error);
     }
   }
 
